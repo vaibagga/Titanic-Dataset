@@ -1,3 +1,4 @@
+## import dependencies
 import matplotlib.pyplot as plt
 from matplotlib import style
 style.use('ggplot')
@@ -5,10 +6,18 @@ import numpy as np
 from sklearn.cluster import KMeans
 from sklearn import preprocessing,cross_validation
 import pandas as pd
+
+## reading the dataset present in excel format
 df=pd.read_excel('titanic.xls')
 #print (df.head())
+
+## drop name column
 df.drop(['body','name'],1,inplace=True)
+
+## encode object variables
 df.convert_objects(convert_numeric=True)
+
+## fill NAs
 df.fillna(0,inplace=True)
 
 
@@ -33,9 +42,17 @@ def handle_non_numeric_data(df):
 
 df = handle_non_numeric_data(df)
 #print (df.head())
+
+## convert data to array of floats
 X=np.array(df.drop(['survived'],1).astype(float))
+
+## scaling data
 X=preprocessing.scale(X)
+
+## predicted values
 y=np.array(df['survived'])
+
+## KNN classifier
 clf=KMeans(n_clusters=2)
 clf.fit(X)
 
@@ -46,4 +63,4 @@ for i in range(len(X)):
     prediction=clf.predict(predict_me)
     if prediction[0]==y[i]:
         correct+=1
-print(correct/len(X))
+print(correct/len(X))   ##accuracy
